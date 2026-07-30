@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Générateur de liens — Invités</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Karla:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ivory:#fffcf7;
+    --white-soft:#FFFDF8;
+    --deep-water:#9e6810;
+    --deep-water-light:#b37717;
+    --gold:#B8912F;
+    --sage:#7C8B6F;
+    --charcoal:#2A2A28;
+    --charcoal-60:rgba(42,42,40,0.62);
+    --ring:rgba(36,66,75,0.16);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--ivory);
+    color:var(--charcoal);
+    font-family:'Karla', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .page{
+    max-width:560px;
+    margin:0 auto;
+    padding:48px 24px 64px;
+  }
+  h1{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size:28px;
+    color:var(--deep-water);
+    margin:0 0 6px;
+    text-align:center;
+  }
+  .subtitle{
+    text-align:center;
+    font-size:14px;
+    color:var(--charcoal-60);
+    margin:0 0 32px;
+    line-height:1.6;
+  }
+  .card{
+    background:var(--white-soft);
+    border:1px solid var(--ring);
+    border-radius:2px;
+    padding:28px 26px;
+    margin-bottom:20px;
+  }
+  .field-label{
+    display:block;
+    font-size:13px;
+    letter-spacing:0.04em;
+    color:var(--charcoal-60);
+    margin-bottom:8px;
+  }
+  input[type=text]{
+    width:100%;
+    font-family:'Karla', sans-serif;
+    font-size:15px;
+    padding:12px 14px;
+    border:1px solid var(--ring);
+    border-radius:2px;
+    background:var(--ivory);
+    color:var(--charcoal);
+    margin-bottom:16px;
+  }
+  input:focus, button:focus{
+    outline:2px solid var(--deep-water-light);
+    outline-offset:2px;
+  }
+  .btn{
+    display:block;
+    width:100%;
+    padding:13px;
+    font-family:'Karla', sans-serif;
+    font-weight:600;
+    font-size:14px;
+    letter-spacing:0.03em;
+    border:none;
+    border-radius:2px;
+    background:var(--deep-water);
+    color:var(--white-soft);
+    cursor:pointer;
+  }
+  .btn:hover{background:var(--deep-water-light);}
+  .hint{
+    font-size:12.5px;
+    color:var(--charcoal-60);
+    margin-top:-8px;
+    margin-bottom:16px;
+    line-height:1.5;
+  }
+  .result{
+    display:none;
+    margin-top:20px;
+    padding:16px;
+    background:var(--ivory);
+    border:1px solid var(--ring);
+    border-radius:2px;
+  }
+  .result.show{display:block;}
+  .result-link{
+    font-size:13px;
+    word-break:break-all;
+    color:var(--deep-water);
+    margin:0 0 12px;
+  }
+  .copy-btn{
+    background:transparent;
+    border:1px solid var(--deep-water);
+    color:var(--deep-water);
+    padding:9px 16px;
+    border-radius:2px;
+    font-family:'Karla', sans-serif;
+    font-weight:600;
+    font-size:13px;
+    cursor:pointer;
+    margin-right:8px;
+  }
+  .copy-btn:hover{background:var(--deep-water); color:var(--white-soft);}
+  .status{
+    font-size:13px;
+    color:var(--sage);
+    margin-top:10px;
+  }
+  .history{
+    margin-top:8px;
+  }
+  .history-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:10px 0;
+    border-top:1px solid var(--ring);
+    font-size:13.5px;
+  }
+  .history-item:first-child{border-top:none;}
+  .history-item .h-name{
+    font-weight:600;
+  }
+  .history-item button{
+    background:transparent;
+    border:1px solid var(--ring);
+    color:var(--charcoal-60);
+    padding:5px 10px;
+    border-radius:2px;
+    font-size:12px;
+    cursor:pointer;
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <h1>Générateur de liens</h1>
+  <p class="subtitle">Outil réservé aux administrateurs — créez un lien personnalisé par invité,<br>à copier-coller dans WhatsApp, SMS ou email.</p>
+
+  <div class="card">
+    <label class="field-label" for="baseUrl">Adresse de la page d'invitation publiée</label>
+    <input type="text" id="baseUrl" placeholder="https://quetzaldrc.github.io/view/invitatmariagevianney">
+    <p class="hint">Collez ici le lien complet de l'invitation. Il sera mémorisé pour les invités suivants, tant que cette page reste ouverte (donc possible de coller une fois et générer des liens personnalisés pour plusieurs invités).</p>
+
+    <label class="field-label" for="guestNameInput">Nom de l'invité</label>
+    <input type="text" id="guestNameInput" placeholder="Ex : Mr. Vianney Iragi">
+
+    <button class="btn" id="generateBtn">Générer le lien</button>
+
+    <div class="result" id="result">
+      <p class="result-link" id="resultLink"></p>
+      <button class="copy-btn" id="copyBtn">Copier le lien</button>
+      <p class="status" id="statusMsg"></p>
+    </div>
+  </div>
+
+  <div class="card" id="historyCard" style="display:none;">
+    <label class="field-label" style="margin-bottom:0;">Liens générés dans cette session</label>
+    <div class="history" id="historyList"></div>
+  </div>
+</div>
+
+<script>
+  const SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbzmp99pXq8h6Elz8W8keqRhJbVez5urEZdjlNiJQi2demaiLlkSwhY_2Lcc3dY7yR7bXA/exec";
+
+  function sendToSheet(payload){
+    return fetch(SHEET_ENDPOINT, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    });
+  }
+
+  const sessionHistory = [];
+
+  function renderHistory(){
+    const card = document.getElementById('historyCard');
+    const list = document.getElementById('historyList');
+    if(sessionHistory.length === 0){
+      card.style.display = 'none';
+      return;
+    }
+    card.style.display = 'block';
+    list.innerHTML = '';
+    sessionHistory.slice().reverse().forEach(item => {
+      const row = document.createElement('div');
+      row.className = 'history-item';
+      row.innerHTML = '<span class="h-name">' + item.name + '</span>';
+      const btn = document.createElement('button');
+      btn.textContent = 'Copier';
+      btn.addEventListener('click', () => {
+        navigator.clipboard.writeText(item.link);
+        btn.textContent = 'Copié !';
+        setTimeout(() => btn.textContent = 'Copier', 1500);
+      });
+      row.appendChild(btn);
+      list.appendChild(row);
+    });
+  }
+
+  document.getElementById('generateBtn').addEventListener('click', () => {
+    const base = document.getElementById('baseUrl').value.trim().replace(/\/$/, '');
+    const name = document.getElementById('guestNameInput').value.trim();
+    const resultEl = document.getElementById('result');
+    const linkEl = document.getElementById('resultLink');
+    const statusEl = document.getElementById('statusMsg');
+
+    if(!base){
+      alert("Merci de renseigner l'adresse de la page d'invitation d'abord.");
+      return;
+    }
+    if(!name){
+      alert("Merci de renseigner le nom de l'invité.");
+      return;
+    }
+
+    const link = base + '?nom=' + encodeURIComponent(name);
+    linkEl.textContent = link;
+    resultEl.classList.add('show');
+
+    sendToSheet({ type: 'ListeInvites', nom: name })
+      .then(() => {
+        statusEl.textContent = "Ajouté à la liste des invités.";
+      })
+      .catch(() => {
+        statusEl.textContent = "Lien généré, mais l'enregistrement a échoué.";
+      });
+
+    sessionHistory.push({ name, link });
+    renderHistory();
+
+    document.getElementById('guestNameInput').value = '';
+    document.getElementById('guestNameInput').focus();
+  });
+
+  document.getElementById('copyBtn').addEventListener('click', () => {
+    const link = document.getElementById('resultLink').textContent;
+    navigator.clipboard.writeText(link);
+    const btn = document.getElementById('copyBtn');
+    btn.textContent = 'Copié !';
+    setTimeout(() => btn.textContent = 'Copier le lien', 1500);
+  });
+</script>
+
+</body>
+</html>
